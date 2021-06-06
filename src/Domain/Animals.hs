@@ -16,15 +16,15 @@ import Api.Auth (LoggedInUser)
 import Control.Monad.IO.Class (liftIO)
 import Data.Maybe (mapMaybe)
 import Domain.DomainProofs
-  ( HasAccessToHabitat,
+  ( HasAMaximumLengthOf,
+    HasAccessToHabitat,
     IsAValidatedAnimal,
-    HasAMaximumLengthOf,
     NonEmpty,
     Positive,
+    proveHasAMaximumLengthOf,
     proveHasAccessToHabitat,
     proveInHabitat,
     proveIsAValidatedAnimal,
-    proveHasAMaximumLengthOf,
     proveNonEmpty,
   )
 import DomainIndependent.GDPExtras (Named, SuchThat, SuchThatIt)
@@ -36,8 +36,7 @@ getAnimalsForHabitat ::
   forall user habitat pagesize.
   LogSettings ->
   LoggedInUser `Named` user ->
-  String `Named` habitat
-    `SuchThat` NonEmpty habitat ->
+  String `Named` habitat `SuchThat` NonEmpty habitat ->
   Int `Named` pagesize `SuchThat` Positive pagesize ->
   IO
     ( Either
