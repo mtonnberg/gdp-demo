@@ -1,0 +1,3 @@
+port=8484
+graylogserver="https://graylog-server-foo.com"
+graylogpropApplication="gdp-demo"

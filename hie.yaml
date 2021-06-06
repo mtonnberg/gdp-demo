@@ -1,0 +1,9 @@
+# to make HIE work well with swagger
+cradle:
+    stack:
+      - path: "./src"
+        component: "gdp-demo:lib"
+      - path: "./app"
+        component: "gdp-demo:exe:gdp-demo"
+      - path: "./test"
+        component: "gdp-demo:test:gdp-demo-test"

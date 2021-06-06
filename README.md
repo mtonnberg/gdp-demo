@@ -1,0 +1,1 @@
+A demo of how to enhance a webapi built with Servant by capturing knowledge in types witht the help of the "Ghosts of Departed proofs"-package (GDP)

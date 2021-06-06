@@ -1,0 +1,122 @@
+name: gdp-demo
+homepage: https://github.com/mtonnberg/gdp-demo#readme
+license: AllRightsReserved
+author: Mikael Tönnberg
+maintainer: mikael@carboncloud.com
+copyright: 2019 CarbonCloud
+category: Web
+build-type: Simple
+extra-source-files: README.md
+
+dependencies:
+  - base >= 4.7 && < 5
+  - template-haskell
+  - aeson
+  - aeson-diff
+  - aeson-pretty
+  - algebraic-graphs
+  - async
+  - app-settings
+  - base64
+  - bytestring
+  - resourcet
+  - cache
+  - clock
+  - conduit
+  - containers
+  - country
+  - exceptions
+  - unliftio
+  - data-default
+  - data-textual
+  - extra
+  - fast-logger
+  - freer-simple
+  - gdp
+  - hashable
+  - hspec
+  - http-conduit
+  - http-types
+  - lens
+  - lens-aeson
+  - megaparsec
+  - modern-uri
+  - monad-control
+  - monad-logger
+  - mtl
+  - network
+  - optparse-applicative
+  - persistent
+  - persistent-template
+  - persistent-postgresql
+  - random
+  - resource-pool
+  - scalpel
+  - scientific
+  - servant-server
+  - string-conversions
+  - servant-options
+  - servant
+  - servant-foreign
+  - servant-swagger
+  - JuicyPixels
+  - split
+  - stm
+  - swagger2
+  - text
+  - tuple
+  - time
+  - transformers
+  - parallel
+  - uuid
+  - unordered-containers
+  - vector
+  - wai
+  - wai-extra
+  - wai-cors
+  - wai-websockets
+  - websockets
+  - warp
+  - case-insensitive
+  - servant-websockets
+  - wreq
+  - ghc
+  - bytestring-conversion
+  - ieee754
+  - these
+  - http-media
+
+library:
+  source-dirs:
+    - src
+    - domain-independent
+  exposed-modules:
+    - Api.Api
+    - Api.ApiImplementation
+    - Api.Auth
+    - Effects.Logging
+    - CoEffects.Settings
+    - DomainIndependent.ApiNamedInput
+    - DomainIndependent.StringConversions
+    - DomainIndependent.Choice
+    - DomainIndependent.GDPExtras
+    - DomainIndependent.ProveInIsolation
+  other-modules:
+    - Domain.DomainProofs
+    - Domain.Animals
+    - Effects.Logging.Graylog.GelfMessage
+    - Effects.Logging.Graylog.GraylogServer
+    - Effects.Logging.Graylog.MonadicLogger
+    - Effects.Logging.Graylog.Sending
+    - Effects.Logging.LogSettings
+    - Effects.Logging.Stdout.Stdout
+
+executables:
+  gdp-demo:
+    main: Main.hs
+    source-dirs: app
+    dependencies: gdp-demo
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
