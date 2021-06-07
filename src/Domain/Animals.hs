@@ -19,13 +19,13 @@ import Domain.DomainProofs
   ( HasAMaximumLengthOf,
     HasAccessToHabitat,
     IsAValidatedAnimal,
-    NonEmpty,
-    Positive,
+    IsNonEmpty,
+    IsPositive,
     proveHasAMaximumLengthOf,
     proveHasAccessToHabitat,
     proveInHabitat,
     proveIsAValidatedAnimal,
-    proveNonEmpty,
+    proveIsNonEmpty,
   )
 import DomainIndependent.GDPExtras (Named, SuchThat, SuchThatIt)
 import Effects.Logging (LogSettings, logError, logWarning)
@@ -33,18 +33,17 @@ import GDP (exorcise, name, unname, (...))
 import Servant (ServerError, err401, err500)
 
 getAnimalsForHabitat ::
-  forall user habitat pagesize.
   LogSettings ->
   LoggedInUser `Named` user ->
-  String `Named` habitat `SuchThat` NonEmpty habitat ->
-  Int `Named` pagesize `SuchThat` Positive pagesize ->
+  String `Named` habitat `SuchThat` IsNonEmpty habitat ->
+  Int `Named` pagesize `SuchThat` IsPositive pagesize ->
   IO
     ( Either
         ServerError
         ( ( [String `SuchThatIt` IsAValidatedAnimal habitat]
               `SuchThatIt` HasAMaximumLengthOf pagesize
           )
-            `SuchThat` HasAccessToHabitat user habitat
+            `SuchThat` (user `HasAccessToHabitat` habitat)
         )
     )
 getAnimalsForHabitat logger user habitat pagesize =
@@ -73,9 +72,9 @@ allAnimalsForHabitat habitat =
   where
     mkValidatedAnimal :: String `Named` animal -> Maybe (String `Named` animal `SuchThat` IsAValidatedAnimal habitat animal)
     mkValidatedAnimal namedAnimal =
-      case (proveInHabitat namedAnimal habitat, proveNonEmpty namedAnimal) of
-        (Just habitatProof, Just animalNonEmptyProof) ->
-          Just (namedAnimal ... proveIsAValidatedAnimal (habitat ... habitatProof) (namedAnimal ... animalNonEmptyProof))
+      case (proveInHabitat namedAnimal habitat, proveIsNonEmpty namedAnimal) of
+        (Just habitatProof, Just animalIsNonEmptyProof) ->
+          Just (namedAnimal ... proveIsAValidatedAnimal (habitat ... habitatProof) (namedAnimal ... animalIsNonEmptyProof))
         _ -> Nothing
 
 allAnimals :: IO [String]

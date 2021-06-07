@@ -10,20 +10,20 @@
 {-# LANGUAGE UndecidableInstances #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
-module DomainIndependent.ProveInIsolation (ProvableInIsolation, proveFromHttpApiData) where
+module DomainIndependent.ProveInIsolation (ProvableInIsolation, proveInIsolation) where
 
 import GDP (Proof, (...), type (:::), type (~~))
+import Data.Text (Text)
 import Servant
   ( FromHttpApiData,
     parseUrlPiece,
   )
 
 class ProvableInIsolation a p where
-  proveFromHttpApiData :: a -> Proof p
+  proveInIsolation :: a -> Either Text (Proof p)
 
 instance (FromHttpApiData (a ~~ n), FromHttpApiData a, ProvableInIsolation (a ~~ n) p) => FromHttpApiData (a ~~ n ::: p) where
   parseUrlPiece t =
     do
       (j :: a ~~ n) <- parseUrlPiece t
-      let p = proveFromHttpApiData j
-      return (j ... p)
+      (j ...) <$> proveInIsolation j

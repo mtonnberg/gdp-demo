@@ -2,7 +2,7 @@
 
 module Main where
 
-import Api.ApiImplementation (runApp)
+import Api.ServantApp (runApp)
 
 main :: IO ()
 main = do

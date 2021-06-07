@@ -6,14 +6,15 @@
 {-# LANGUAGE RoleAnnotations #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 {-# OPTIONS_GHC -fno-warn-unused-top-binds #-}
 
 module Domain.DomainProofs
-  ( NonEmpty,
-    Positive,
+  ( IsNonEmpty,
+    IsPositive,
     BelongsIn,
     proveHasAccessToHabitat,
     HasAMaximumLengthOf,
@@ -21,7 +22,7 @@ module Domain.DomainProofs
     IsAValidatedAnimal,
     proveInHabitat,
     proveHasAMaximumLengthOf,
-    proveNonEmpty,
+    proveIsNonEmpty,
     proveIsAValidatedAnimal,
   )
 where
@@ -31,16 +32,16 @@ import Api.Auth
     LoggedInUser (..),
   )
 import qualified Data.List.NonEmpty as NonEmpty
-import DomainIndependent.ProveInIsolation (ProvableInIsolation, proveFromHttpApiData)
+import DomainIndependent.ProveInIsolation (ProvableInIsolation, proveInIsolation)
 import GDP (Defn, Proof, axiom, the, type (:::), type (~~))
 
-newtype NonEmpty a = NonEmpty Defn
+newtype IsNonEmpty a = IsNonEmpty Defn
 
-type role NonEmpty nominal
+type role IsNonEmpty nominal
 
-newtype Positive a = Positive Defn
+newtype IsPositive a = IsPositive Defn
 
-type role Positive nominal
+type role IsPositive nominal
 
 newtype BelongsIn habitat animal = BelongsIn Defn
 
@@ -60,7 +61,7 @@ type role IsAValidatedAnimal nominal nominal
 
 proveIsAValidatedAnimal ::
   String ~~ habitat ::: BelongsIn habitat animal ->
-  String ~~ animal ::: NonEmpty animal ->
+  String ~~ animal ::: IsNonEmpty animal ->
   Proof (IsAValidatedAnimal habitat animal)
 proveIsAValidatedAnimal _ _ = axiom
 
@@ -85,22 +86,22 @@ proveHasAMaximumLengthOf :: [a] ~~ l -> Int ~~ i -> Maybe (Proof (HasAMaximumLen
 proveHasAMaximumLengthOf list size =
   if length (the list) <= the size then Just axiom else Nothing
 
-instance ProvableInIsolation (String ~~ n) (NonEmpty n) where
-  proveFromHttpApiData s =
-    case proveNonEmpty s of
-      Just p -> p
-      Nothing -> error "could not prove string nonempty!"
+instance ProvableInIsolation (String ~~ n) (IsNonEmpty n) where
+  proveInIsolation s =
+    case proveIsNonEmpty s of
+      Just p -> Right p
+      Nothing -> Left "could not prove string nonempty!"
 
-instance ProvableInIsolation (Int ~~ n) (Positive n) where
-  proveFromHttpApiData s =
-    case provePositive s of
-      Just p -> p
-      Nothing -> error "could not prove int positive!"
+instance ProvableInIsolation (Int ~~ n) (IsPositive n) where
+  proveInIsolation s =
+    case proveIsPositive s of
+      Just p -> Right p
+      Nothing -> Left "could not prove int positive!"
 
-proveNonEmpty :: String ~~ n -> Maybe (Proof (NonEmpty n))
-proveNonEmpty x =
+proveIsNonEmpty :: String ~~ n -> Maybe (Proof (IsNonEmpty n))
+proveIsNonEmpty x =
   if not (null (the x)) then Just axiom else Nothing
 
-provePositive :: Int ~~ n -> Maybe (Proof (Positive n))
-provePositive x =
+proveIsPositive :: Int ~~ n -> Maybe (Proof (IsPositive n))
+proveIsPositive x =
   if the x > 0 then Just axiom else Nothing
