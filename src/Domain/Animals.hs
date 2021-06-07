@@ -25,10 +25,11 @@ import Domain.DomainProofs
     proveInHabitat,
     proveIsAValidatedAnimal,
     proveIsNonEmpty,
+    takeXElements,
   )
 import DomainIndependent.GDPExtras (Named, SuchThat, SuchThatIt)
 import Effects.Logging (LogSettings, logError, logWarning)
-import GDP (exorcise, name, unname, (...))
+import GDP (exorcise, name, rename, unname, (...))
 import Servant (ServerError, err401, err500)
 
 getAnimalsForHabitat ::
@@ -50,17 +51,10 @@ getAnimalsForHabitat logger user habitat pagesize =
     animals <- liftIO allAnimals
     case proveHasAccessToHabitat user (exorcise habitat) of
       Just accessProof ->
-        let validatedAnimals = allAnimalsForHabitat (exorcise habitat) animals
-         in name
-              validatedAnimals
-              ( \namedResultList ->
-                  let mLengthProof = proveHasAMaximumLengthOf namedResultList (exorcise pagesize)
-                   in case mLengthProof of
-                        Nothing -> do
-                          logError logger "Result is greater than pageSize!"
-                          return $ Left err500
-                        Just r -> return $ Right (unname (namedResultList ... r) ... accessProof)
-              )
+        let validatedAnimals =
+              takeXElements pagesize $
+                allAnimalsForHabitat (exorcise habitat) animals
+         in return $ Right $ validatedAnimals ... accessProof
       Nothing -> do
         logWarning logger "GDP demo test message, wrong user"
         return $ Left err401

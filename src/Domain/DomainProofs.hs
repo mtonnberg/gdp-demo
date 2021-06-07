@@ -2,11 +2,11 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE RoleAnnotations #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
@@ -24,6 +24,7 @@ module Domain.DomainProofs
     proveHasAMaximumLengthOf,
     proveIsNonEmpty,
     proveIsAValidatedAnimal,
+    takeXElements
   )
 where
 
@@ -33,7 +34,7 @@ import Api.Auth
   )
 import qualified Data.List.NonEmpty as NonEmpty
 import DomainIndependent.ProveInIsolation (ProvableInIsolation, proveInIsolation)
-import GDP (Defn, Proof, axiom, the, type (:::), type (~~))
+import GDP (Defn, Proof, axiom, the, type (:::), type (?), type (~~), assert)
 
 newtype IsNonEmpty a = IsNonEmpty Defn
 
@@ -85,6 +86,11 @@ proveInHabitat animal habitat
 proveHasAMaximumLengthOf :: [a] ~~ l -> Int ~~ i -> Maybe (Proof (HasAMaximumLengthOf i l))
 proveHasAMaximumLengthOf list size =
   if length (the list) <= the size then Just axiom else Nothing
+
+takeXElements :: Int ~~ size ::: IsPositive size -> [a] -> [a] ? HasAMaximumLengthOf size
+takeXElements s x =
+  let takenList = take (the s) x
+   in assert takenList
 
 instance ProvableInIsolation (String ~~ n) (IsNonEmpty n) where
   proveInIsolation s =
