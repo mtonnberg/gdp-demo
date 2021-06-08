@@ -20,17 +20,16 @@ import Domain.DomainProofs
     IsAValidatedAnimal,
     IsNonEmpty,
     IsPositive,
-    proveHasAMaximumLengthOf,
     proveHasAccessToHabitat,
     proveInHabitat,
     proveIsAValidatedAnimal,
     proveIsNonEmpty,
     takeXElements,
   )
-import DomainIndependent.GDPExtras (Named, SuchThat, SuchThatIt)
-import Effects.Logging (LogSettings, logError, logWarning)
-import GDP (exorcise, name, rename, unname, (...))
-import Servant (ServerError, err401, err500)
+import Servant.GDP (Named, SuchThat, SuchThatIt)
+import Effects.Logging (LogSettings, logWarning)
+import GDP (exorcise, name, unname, (...))
+import Servant (ServerError, err401)
 
 getAnimalsForHabitat ::
   LogSettings ->

@@ -10,14 +10,14 @@
 {-# LANGUAGE UndecidableInstances #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
-module DomainIndependent.ApiNamedInput (ApiName0, ApiName1, ApiName2, ApiName3, ApiName4, Capture') where
+module Servant.GDP.ApiNamedInput (ApiName0, ApiName1, ApiName2, ApiName3, ApiName4, CaptureNamed) where
 
 import Control.Monad ((<=<))
 import Data.Aeson (FromJSON, parseJSON)
 import GDP (Defn, defn, type (~~))
 import Servant (Capture, FromHttpApiData, parseUrlPiece)
 
-type Capture' a = Capture "input" a
+type CaptureNamed a = Capture "input" a
 
 newtype ApiName0 = ApiName0 Defn
 

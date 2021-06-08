@@ -33,7 +33,7 @@ import Api.Auth
     LoggedInUser (..),
   )
 import qualified Data.List.NonEmpty as NonEmpty
-import DomainIndependent.ProveInIsolation (ProvableInIsolation, proveInIsolation)
+import Servant.GDP (ProvableInIsolation, proveInIsolation)
 import GDP (Defn, Proof, axiom, the, type (:::), type (?), type (~~), assert)
 
 newtype IsNonEmpty a = IsNonEmpty Defn

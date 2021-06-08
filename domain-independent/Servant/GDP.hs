@@ -10,19 +10,19 @@
 {-# LANGUAGE UndecidableInstances #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
-module DomainIndependent.GDPExtras (Named, SuchThatIt, SuchThat) where
+module Servant.GDP
+  ( module Servant.GDP.ApiNamedInput,
+    module Servant.GDP.NaturalLanguageOperators,
+    module Servant.GDP.ProveInIsolation,
+  )
+where
+
+import Servant.GDP.ApiNamedInput
+import Servant.GDP.NaturalLanguageOperators
+import Servant.GDP.ProveInIsolation
 
 import Data.Aeson (ToJSON, toJSON)
 import GDP (exorcise, rename, the, type (:::), type (?), type (~~))
-
--- | # Alias for GDP (~~)
-type Named a b = (~~) a b
-
--- | # Alias for GDP (?)
-type SuchThatIt a b = (?) a b
-
--- | # Alias for GDP (:::)
-type SuchThat a b = (:::) a b
 
 instance (ToJSON a) => ToJSON (a ~~ p) where
   toJSON = toJSON . the

@@ -97,11 +97,12 @@ library:
     - Api.Auth
     - Effects.Logging
     - CoEffects.Settings
-    - DomainIndependent.ApiNamedInput
     - DomainIndependent.StringConversions
     - DomainIndependent.Choice
-    - DomainIndependent.GDPExtras
-    - DomainIndependent.ProveInIsolation
+    - Servant.GDP
+    - Servant.GDP.ApiNamedInput
+    - Servant.GDP.NaturalLanguageOperators
+    - Servant.GDP.ProveInIsolation
   other-modules:
     - Domain.DomainProofs
     - Domain.Animals

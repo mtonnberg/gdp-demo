@@ -10,7 +10,7 @@
 {-# LANGUAGE UndecidableInstances #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
-module DomainIndependent.ProveInIsolation (ProvableInIsolation, proveInIsolation) where
+module Servant.GDP.ProveInIsolation (ProvableInIsolation, proveInIsolation) where
 
 import GDP (Proof, (...), type (:::), type (~~))
 import Data.Text (Text)

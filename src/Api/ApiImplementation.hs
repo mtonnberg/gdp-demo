@@ -24,7 +24,7 @@ import Domain.DomainProofs
     IsNonEmpty,
     IsPositive,
   )
-import DomainIndependent.GDPExtras (Named, SuchThat, SuchThatIt)
+import Servant.GDP (Named, SuchThat, SuchThatIt)
 import Effects.Logging (LogSettings)
 import Servant (Handler, Server, throwError)
 
