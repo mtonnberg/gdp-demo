@@ -36,16 +36,11 @@ library:
     - src
     - domain-independent
   exposed-modules:
+    - Api.ServantApp
+  other-modules:
     - Api.ApiDeclaration
     - Api.ApiImplementation
-    - Api.ServantApp
     - Api.Auth
-    - Effects.Logging
-    - CoEffects.Settings
-    - DomainIndependent.StringConversions
-    - DomainIndependent.Choice
-    - DomainIndependent.GDPHumanReadable
-  other-modules:
     - Domain.DomainProofs
     - Domain.Animals
     - Effects.Logging.Graylog.GelfMessage
@@ -54,6 +49,10 @@ library:
     - Effects.Logging.Graylog.Sending
     - Effects.Logging.LogSettings
     - Effects.Logging.Stdout.Stdout
+    - Effects.Logging
+    - CoEffects.Settings
+    - DomainIndependent.StringConversions
+    - DomainIndependent.GDPHumanReadable
 
 executables:
   gdp-demo:
