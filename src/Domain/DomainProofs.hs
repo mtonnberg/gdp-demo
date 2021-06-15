@@ -24,7 +24,7 @@ module Domain.DomainProofs
     proveHasAMaximumLengthOf,
     proveIsNonEmpty,
     proveIsAValidatedAnimal,
-    takeXElements
+    takeXElements,
   )
 where
 
@@ -33,8 +33,8 @@ import Api.Auth
     LoggedInUser (..),
   )
 import qualified Data.List.NonEmpty as NonEmpty
-import Servant.GDP (ProvableInIsolation, proveInIsolation)
-import GDP (Defn, Proof, axiom, the, type (:::), type (?), type (~~), assert)
+import GDP (Defn, Proof, assert, axiom, the, type (:::), type (?), type (~~))
+import Servant.GDP (Named, ProvableInIsolation, proveInIsolation)
 
 newtype IsNonEmpty a = IsNonEmpty Defn
 
@@ -108,6 +108,6 @@ proveIsNonEmpty :: String ~~ n -> Maybe (Proof (IsNonEmpty n))
 proveIsNonEmpty x =
   if not (null (the x)) then Just axiom else Nothing
 
-proveIsPositive :: Int ~~ n -> Maybe (Proof (IsPositive n))
+proveIsPositive :: Int `Named` n -> Maybe (Proof (IsPositive n))
 proveIsPositive x =
   if the x > 0 then Just axiom else Nothing

@@ -59,6 +59,7 @@ dependencies:
   - servant
   - servant-foreign
   - servant-swagger
+  - servant-gdp
   - JuicyPixels
   - split
   - stm
@@ -99,10 +100,6 @@ library:
     - CoEffects.Settings
     - DomainIndependent.StringConversions
     - DomainIndependent.Choice
-    - Servant.GDP
-    - Servant.GDP.ApiNamedInput
-    - Servant.GDP.NaturalLanguageOperators
-    - Servant.GDP.ProveInIsolation
   other-modules:
     - Domain.DomainProofs
     - Domain.Animals

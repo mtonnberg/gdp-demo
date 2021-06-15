@@ -12,8 +12,7 @@ module Domain.Animals
 where
 
 import Api.Auth (LoggedInUser)
-import Control.Monad.IO.Class (liftIO)
-import Data.Maybe (mapMaybe)
+import Data.Maybe (catMaybes)
 import Domain.DomainProofs
   ( HasAMaximumLengthOf,
     HasAccessToHabitat,
@@ -26,10 +25,10 @@ import Domain.DomainProofs
     proveIsNonEmpty,
     takeXElements,
   )
-import Servant.GDP (Named, SuchThat, SuchThatIt)
 import Effects.Logging (LogSettings, logWarning)
-import GDP (exorcise, name, unname, (...))
+import GDP (name, unname)
 import Servant (ServerError, err401)
+import Servant.GDP (Named, SuchThat, SuchThatIt, withProof, withoutProof)
 
 getAnimalsForHabitat ::
   LogSettings ->
@@ -47,28 +46,41 @@ getAnimalsForHabitat ::
     )
 getAnimalsForHabitat logger user habitat pagesize =
   do
-    animals <- liftIO allAnimals
-    case proveHasAccessToHabitat user (exorcise habitat) of
+    animals <- allAnimals
+    case proveHasAccessToHabitat user (withoutProof habitat) of
       Just accessProof ->
         let validatedAnimals =
               takeXElements pagesize $
-                allAnimalsForHabitat (exorcise habitat) animals
-         in return $ Right $ validatedAnimals ... accessProof
+                allAnimalsForHabitat (withoutProof habitat) animals
+         in return $ Right $ validatedAnimals `withProof` accessProof
       Nothing -> do
         logWarning logger "GDP demo test message, wrong user"
         return $ Left err401
 
-allAnimalsForHabitat :: forall habitat. String `Named` habitat -> [String] -> [String `SuchThatIt` IsAValidatedAnimal habitat]
-allAnimalsForHabitat habitat =
-  mapMaybe (\a -> name a (fmap unname . mkValidatedAnimal))
+allAnimalsForHabitat ::
+  forall habitat.
+  String `Named` habitat ->
+  [String] ->
+  [String `SuchThatIt` IsAValidatedAnimal habitat]
+allAnimalsForHabitat habitat animals =
+  let rawResults :: [Maybe (String `SuchThatIt` IsAValidatedAnimal habitat)]
+      rawResults = map (\animal -> name animal (fmap unname . mkValidatedAnimal)) animals
+   in catMaybes rawResults
   where
-    mkValidatedAnimal :: String `Named` animal -> Maybe (String `Named` animal `SuchThat` IsAValidatedAnimal habitat animal)
+    mkValidatedAnimal ::
+      String `Named` animal ->
+      Maybe (String `Named` animal `SuchThat` IsAValidatedAnimal habitat animal)
     mkValidatedAnimal namedAnimal =
       case (proveInHabitat namedAnimal habitat, proveIsNonEmpty namedAnimal) of
         (Just habitatProof, Just animalIsNonEmptyProof) ->
-          Just (namedAnimal ... proveIsAValidatedAnimal (habitat ... habitatProof) (namedAnimal ... animalIsNonEmptyProof))
+          let isValidatedProof =
+                proveIsAValidatedAnimal
+                  (habitat `withProof` habitatProof)
+                  (namedAnimal `withProof` animalIsNonEmptyProof)
+           in Just (namedAnimal `withProof` isValidatedProof)
         _ -> Nothing
 
 allAnimals :: IO [String]
 allAnimals = do
+  -- This could come from database for example
   return ["polarbear", "lion", "seal", "pumba"]
