@@ -87,10 +87,6 @@ newtype UserName = UserName Defn
 
 type role UserName
 
-instance (FromHttpApiData a) => FromHttpApiData (a ~~ UserName) where
-  parseUrlPiece t =
-    defn <$> parseUrlPiece t
-
 normalAccessHandler ::
   Request ->
   Handler (LoggedInUser ~~ UserName)
