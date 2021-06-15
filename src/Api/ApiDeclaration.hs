@@ -1,23 +1,15 @@
 {-# LANGUAGE DataKinds #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE RoleAnnotations #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE TypeOperators #-}
-{-# LANGUAGE UndecidableInstances #-}
 
 module Api.ApiDeclaration where
 
 import Api.Auth
 import Data.Proxy (Proxy (Proxy))
 import Domain.DomainProofs (HasAMaximumLengthOf, HasAccessToHabitat, IsAValidatedAnimal, IsNonEmpty, IsPositive)
+import DomainIndependent.GDPHumanReadable (Named, SuchThat, SuchThatIt)
 import Servant (Get, JSON, (:>))
 import Servant.API.Experimental.Auth (AuthProtect)
 import Servant.GDP (ApiName0, ApiName1, CaptureNamed)
-import DomainIndependent.GDPHumanReadable (Named, SuchThat, SuchThatIt)
 
 type GetAnimalsForHabitat user habitat pagesize =
   AuthProtect "normalUser"
