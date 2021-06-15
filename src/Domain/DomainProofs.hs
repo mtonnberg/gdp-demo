@@ -16,6 +16,7 @@ module Domain.DomainProofs
   ( IsNonEmpty,
     IsPositive,
     BelongsIn,
+    IsTrimmed,
     proveHasAccessToHabitat,
     HasAMaximumLengthOf,
     HasAccessToHabitat,
@@ -33,13 +34,23 @@ import Api.Auth
     LoggedInUser (..),
   )
 import qualified Data.List.NonEmpty as NonEmpty
+import Data.Text
+  ( Text,
+    stripEnd,
+    stripStart,
+  )
 import DomainIndependent.GDPHumanReadable (Named)
+import DomainIndependent.StringConversions (stringToText)
 import GDP (Defn, Proof, assert, axiom, the, type (:::), type (?), type (~~))
 import Servant.GDP (ProvableInIsolation, proveInIsolation)
 
 newtype IsNonEmpty a = IsNonEmpty Defn
 
 type role IsNonEmpty nominal
+
+newtype IsTrimmed a = IsTrimmed Defn
+
+type role IsTrimmed nominal
 
 newtype IsPositive a = IsPositive Defn
 
@@ -99,6 +110,12 @@ instance ProvableInIsolation (String ~~ n) (IsNonEmpty n) where
       Just p -> Right p
       Nothing -> Left "could not prove string nonempty!"
 
+instance ProvableInIsolation (String ~~ n) (IsTrimmed n) where
+  proveInIsolation s =
+    case proveIsTrimmed s of
+      Just p -> Right p
+      Nothing -> Left "could not prove string trimmed!"
+
 instance ProvableInIsolation (Int ~~ n) (IsPositive n) where
   proveInIsolation s =
     case proveIsPositive s of
@@ -108,6 +125,12 @@ instance ProvableInIsolation (Int ~~ n) (IsPositive n) where
 proveIsNonEmpty :: String ~~ n -> Maybe (Proof (IsNonEmpty n))
 proveIsNonEmpty x =
   if not (null (the x)) then Just axiom else Nothing
+
+proveIsTrimmed :: String ~~ n -> Maybe (Proof (IsTrimmed n))
+proveIsTrimmed x =
+  if stripStart (stripEnd $ stringToText $ the x) == stringToText (the x)
+    then Just axiom
+    else Nothing
 
 proveIsPositive :: Int `Named` n -> Maybe (Proof (IsPositive n))
 proveIsPositive x =

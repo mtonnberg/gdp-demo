@@ -5,7 +5,7 @@ nix:
 packages:
   - .
 extra-deps:
-  - https://hackage.haskell.org/package/servant-gdp-0.0.1.1/candidate/servant-gdp-0.0.1.1.tar.gz
+  - https://hackage.haskell.org/package/servant-gdp-0.0.1.2/candidate/servant-gdp-0.0.1.2.tar.gz
   - servant-options-0.1.0.0
   - country-0.2.1@sha256:6988516f98054efce913e7027fb2659e9b2f67e033a10ea8b5b14ac6a3c2749b,2413
   - servant-websockets-2.0.0@sha256:6e9e3600bced90fd52ed3d1bf632205cb21479075b20d6637153cc4567000234,2253

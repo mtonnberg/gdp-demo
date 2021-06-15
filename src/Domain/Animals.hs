@@ -19,6 +19,7 @@ import Domain.DomainProofs
     IsAValidatedAnimal,
     IsNonEmpty,
     IsPositive,
+    IsTrimmed,
     proveHasAccessToHabitat,
     proveInHabitat,
     proveIsAValidatedAnimal,
@@ -27,13 +28,13 @@ import Domain.DomainProofs
   )
 import DomainIndependent.GDPHumanReadable (Named, SuchThat, SuchThatIt, withProof, withoutProof)
 import Effects.Logging (LogSettings, logWarning)
-import GDP (name, unname)
+import GDP (name, unname, type (&&))
 import Servant (ServerError, err401)
 
 getAnimalsForHabitat ::
   LogSettings ->
   LoggedInUser `Named` user ->
-  String `Named` habitat `SuchThat` IsNonEmpty habitat ->
+  String `Named` habitat `SuchThat` (IsNonEmpty habitat && IsTrimmed habitat) ->
   Int `Named` pagesize `SuchThat` IsPositive pagesize ->
   IO
     ( Either

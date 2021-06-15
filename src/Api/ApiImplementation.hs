@@ -1,4 +1,5 @@
 {-# LANGUAGE TypeOperators #-}
+
 module Api.ApiImplementation
   ( server,
   )
@@ -16,9 +17,11 @@ import Domain.DomainProofs
     IsAValidatedAnimal,
     IsNonEmpty,
     IsPositive,
+    IsTrimmed,
   )
 import DomainIndependent.GDPHumanReadable (Named, SuchThat, SuchThatIt)
 import Effects.Logging (LogSettings)
+import GDP (type (&&))
 import Servant (Handler, Server, throwError)
 
 server ::
@@ -29,7 +32,7 @@ server logger = do
   where
     getAnimalsForHabitatH ::
       LoggedInUser `Named` user ->
-      String `Named` habitat `SuchThat` IsNonEmpty habitat ->
+      String `Named` habitat `SuchThat` (IsNonEmpty habitat && IsTrimmed habitat) ->
       Int `Named` pagesize `SuchThat` IsPositive pagesize ->
       Handler
         ( ( [String `SuchThatIt` IsAValidatedAnimal habitat]
