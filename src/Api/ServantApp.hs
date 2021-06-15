@@ -28,7 +28,7 @@ import CoEffects.Settings
     port,
   )
 import Data.Foldable (traverse_)
-import Servant.GDP (Named)
+import DomainIndependent.GDPHumanReadable (Named)
 import Effects.Logging (LogSettings, logException, logRequest)
 import Network.Wai (Application, Request)
 import Network.Wai.Handler.Warp

@@ -25,10 +25,10 @@ import Domain.DomainProofs
     proveIsNonEmpty,
     takeXElements,
   )
+import DomainIndependent.GDPHumanReadable (Named, SuchThat, SuchThatIt, withProof, withoutProof)
 import Effects.Logging (LogSettings, logWarning)
 import GDP (name, unname)
 import Servant (ServerError, err401)
-import Servant.GDP (Named, SuchThat, SuchThatIt, withProof, withoutProof)
 
 getAnimalsForHabitat ::
   LogSettings ->

@@ -16,7 +16,8 @@ import Data.Proxy (Proxy (Proxy))
 import Domain.DomainProofs (HasAMaximumLengthOf, HasAccessToHabitat, IsAValidatedAnimal, IsNonEmpty, IsPositive)
 import Servant (Get, JSON, (:>))
 import Servant.API.Experimental.Auth (AuthProtect)
-import Servant.GDP (ApiName0, ApiName1, CaptureNamed, Named, SuchThat, SuchThatIt)
+import Servant.GDP (ApiName0, ApiName1, CaptureNamed)
+import DomainIndependent.GDPHumanReadable (Named, SuchThat, SuchThatIt)
 
 type GetAnimalsForHabitat user habitat pagesize =
   AuthProtect "normalUser"

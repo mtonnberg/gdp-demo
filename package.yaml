@@ -1,9 +1,9 @@
 name: gdp-demo
 homepage: https://github.com/mtonnberg/gdp-demo#readme
-license: AllRightsReserved
+license: BSD3
 author: Mikael Tönnberg
 maintainer: mikael@carboncloud.com
-copyright: 2019 CarbonCloud
+copyright: 2019 Mikael Tönnberg
 category: Web
 build-type: Simple
 extra-source-files: README.md
@@ -60,10 +60,8 @@ dependencies:
   - servant-foreign
   - servant-swagger
   - servant-gdp
-  - JuicyPixels
   - split
   - stm
-  - swagger2
   - text
   - tuple
   - time
@@ -79,7 +77,6 @@ dependencies:
   - websockets
   - warp
   - case-insensitive
-  - servant-websockets
   - wreq
   - ghc
   - bytestring-conversion
@@ -100,6 +97,7 @@ library:
     - CoEffects.Settings
     - DomainIndependent.StringConversions
     - DomainIndependent.Choice
+    - DomainIndependent.GDPHumanReadable
   other-modules:
     - Domain.DomainProofs
     - Domain.Animals
