@@ -1,15 +1,20 @@
-A demo of how to enhance a webapi built with Servant by capturing knowledge in types witht the help of the "Ghosts of Departed proofs"-package (GDP)
+# Demo of Servant-GDP  
+A demo of how to enhance a webapi built with [Servant](https://haskell-servant.github.io/) (A web api framework) by capturing knowledge in types with the help of the "Ghosts of Departed proofs"-package (GDP).
 
-# How to run
+This is a way to embrace [knowledge-as-code](https://carboncloud.com/2020/12/07/tech-knowledge-as-code/) for fun and profit.
+
+### How to run
 - install nix-shell
 - run `nix-shell`
 - run `stack run`
 
-# Important files
+### Important files
 - ApiDeclaration.hs
 - ApiImplementation.hs
+- Animals.hs
+- DomainProofs.hs
 
-try
+### Urls to try
 
 http://localhost:8484/habitats/north-pole/animals/5?user=user1
 http://localhost:8484/habitats/north-pole/animals/5?user=user2
