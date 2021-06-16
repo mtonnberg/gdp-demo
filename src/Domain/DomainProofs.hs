@@ -34,12 +34,8 @@ import Api.Auth
     LoggedInUser (..),
   )
 import qualified Data.List.NonEmpty as NonEmpty
-import Data.Text
-  ( Text,
-    stripEnd,
-    stripStart,
-  )
-import DomainIndependent.GDPHumanReadable (Named)
+import Data.Text (stripEnd, stripStart)
+import DomainIndependent.GDPAlternativeNaming (Named)
 import DomainIndependent.StringConversions (stringToText)
 import GDP (Defn, Proof, assert, axiom, the, type (:::), type (?), type (~~))
 import Servant.GDP (ProvableInIsolation, proveInIsolation)

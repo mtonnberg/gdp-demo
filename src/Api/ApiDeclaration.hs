@@ -6,7 +6,7 @@ module Api.ApiDeclaration where
 import Api.Auth
 import Data.Proxy (Proxy (Proxy))
 import Domain.DomainProofs (HasAMaximumLengthOf, HasAccessToHabitat, IsAValidatedAnimal, IsNonEmpty, IsPositive, IsTrimmed)
-import DomainIndependent.GDPHumanReadable (Named, SuchThat, SuchThatIt)
+import DomainIndependent.GDPAlternativeNaming (Named, SuchThat, That)
 import GDP (type (&&))
 import Servant (Get, JSON, (:>))
 import Servant.API.Experimental.Auth (AuthProtect)
@@ -15,14 +15,14 @@ import Servant.GDP (ApiName0, ApiName1, CaptureNamed)
 type GetAnimalsForHabitat user habitat pagesize =
   AuthProtect "normalUser"
     :> "habitats"
-    :> CaptureNamed (String `Named` habitat `SuchThat` (IsNonEmpty habitat && IsTrimmed habitat))
+    :> CaptureNamed (String `Named` habitat `SuchThat` IsNonEmpty habitat && IsTrimmed habitat)
     :> "animals"
     :> CaptureNamed (Int `Named` pagesize `SuchThat` IsPositive pagesize)
     :> Get
          '[JSON]
-         ( ( [String `SuchThatIt` IsAValidatedAnimal habitat] `SuchThatIt` HasAMaximumLengthOf pagesize
+         ( ( [String `That` IsAValidatedAnimal habitat] `That` HasAMaximumLengthOf pagesize
            )
-             `SuchThat` (user `HasAccessToHabitat` habitat)
+             `SuchThat` user `HasAccessToHabitat` habitat
          )
 
 type Api =

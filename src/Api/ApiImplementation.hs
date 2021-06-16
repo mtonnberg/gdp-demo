@@ -19,7 +19,7 @@ import Domain.DomainProofs
     IsPositive,
     IsTrimmed,
   )
-import DomainIndependent.GDPHumanReadable (Named, SuchThat, SuchThatIt)
+import DomainIndependent.GDPAlternativeNaming (Named, SuchThat, That)
 import Effects.Logging (LogSettings)
 import GDP (type (&&))
 import Servant (Handler, Server, throwError)
@@ -35,8 +35,8 @@ server logger = do
       String `Named` habitat `SuchThat` (IsNonEmpty habitat && IsTrimmed habitat) ->
       Int `Named` pagesize `SuchThat` IsPositive pagesize ->
       Handler
-        ( ( [String `SuchThatIt` IsAValidatedAnimal habitat]
-              `SuchThatIt` HasAMaximumLengthOf pagesize
+        ( ( [String `That` IsAValidatedAnimal habitat]
+              `That` HasAMaximumLengthOf pagesize
           )
             `SuchThat` HasAccessToHabitat user habitat
         )

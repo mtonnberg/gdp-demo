@@ -26,7 +26,7 @@ import Domain.DomainProofs
     proveIsNonEmpty,
     takeXElements,
   )
-import DomainIndependent.GDPHumanReadable (Named, SuchThat, SuchThatIt, withProof, withoutProof)
+import DomainIndependent.GDPAlternativeNaming (Named, SuchThat, That, withProof, withoutProof)
 import Effects.Logging (LogSettings, logWarning)
 import GDP (name, unname, type (&&))
 import Servant (ServerError, err401)
@@ -39,8 +39,8 @@ getAnimalsForHabitat ::
   IO
     ( Either
         ServerError
-        ( ( [String `SuchThatIt` IsAValidatedAnimal habitat]
-              `SuchThatIt` HasAMaximumLengthOf pagesize
+        ( ( [String `That` IsAValidatedAnimal habitat]
+              `That` HasAMaximumLengthOf pagesize
           )
             `SuchThat` (user `HasAccessToHabitat` habitat)
         )
@@ -62,9 +62,9 @@ allAnimalsForHabitat ::
   forall habitat.
   String `Named` habitat ->
   [String] ->
-  [String `SuchThatIt` IsAValidatedAnimal habitat]
+  [String `That` IsAValidatedAnimal habitat]
 allAnimalsForHabitat habitat animals =
-  let rawResults :: [Maybe (String `SuchThatIt` IsAValidatedAnimal habitat)]
+  let rawResults :: [Maybe (String `That` IsAValidatedAnimal habitat)]
       rawResults = map (\animal -> name animal (fmap unname . mkValidatedAnimal)) animals
    in catMaybes rawResults
   where

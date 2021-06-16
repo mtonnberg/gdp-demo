@@ -52,7 +52,7 @@ library:
     - Effects.Logging
     - CoEffects.Settings
     - DomainIndependent.StringConversions
-    - DomainIndependent.GDPHumanReadable
+    - DomainIndependent.GDPAlternativeNaming
 
 executables:
   gdp-demo:
